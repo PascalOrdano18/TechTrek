@@ -5,8 +5,15 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { ArrowRight, Calendar, ChevronRight, Code, Cpu, ExternalLink, Lightbulb, Rocket, Users } from "lucide-react"
+import { articles } from "@/data/articles"
+import { ArticleCategory } from "@/types/news"
 
 export default function Home() {
+  const filteredArticles = (category: ArticleCategory | 'all') => {
+    if (category === 'all') return articles;
+    return articles.filter(article => article.category === category);
+  };
+
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -187,170 +194,136 @@ export default function Home() {
             <Tabs defaultValue="all" className="mt-8">
               <TabsList className="grid w-full grid-cols-4 mb-8">
                 <TabsTrigger value="all">Todas</TabsTrigger>
-                <TabsTrigger value="events">Eventos</TabsTrigger>
-                <TabsTrigger value="tech">Tecnología</TabsTrigger>
-                <TabsTrigger value="startups">Startups</TabsTrigger>
+                <TabsTrigger value="Evento">Eventos</TabsTrigger>
+                <TabsTrigger value="Tecnología">Tecnología</TabsTrigger>
+                <TabsTrigger value="Startup">Startups</TabsTrigger>
               </TabsList>
               <TabsContent value="all" className="space-y-4">
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {[1, 2, 3, 4, 5, 6].map((i) => (
-                    <Card key={i} className="overflow-hidden">
+                  {filteredArticles('all').map((article) => (
+                    <Card key={article.id} className="overflow-hidden">
                       <CardHeader className="p-0">
                         <Image
-                          src={`/placeholder.svg?height=200&width=400&text=Artículo+${i}`}
+                          src={article.imageUrl}
                           width={400}
                           height={200}
-                          alt={`Artículo ${i}`}
+                          alt={article.title}
                           className="w-full object-cover"
                         />
                       </CardHeader>
                       <CardContent className="p-4">
                         <Badge className="mb-2 bg-primary text-black hover:bg-primary/90">
-                          {i % 3 === 0 ? "Evento" : i % 3 === 1 ? "Tecnología" : "Startup"}
+                          {article.category}
                         </Badge>
-                        <CardTitle className="text-xl mb-2">
-                          {i % 3 === 0
-                            ? `Próximo Taller: Fundamentos de Desarrollo Web`
-                            : i % 3 === 1
-                              ? `Nuevo Avance en IA Cambia Todo`
-                              : `Startup Estudiantil Recauda $2M en Financiamiento`}
-                        </CardTitle>
-                        <CardDescription>
-                          {i % 3 === 0
-                            ? `Únete a nosotros para una sesión interactiva sobre técnicas modernas de desarrollo web.`
-                            : i % 3 === 1
-                              ? `Los últimos avances en inteligencia artificial están revolucionando cómo interactuamos con la tecnología.`
-                              : `Una startup fundada por estudiantes universitarios ha asegurado un financiamiento significativo para su solución innovadora.`}
-                        </CardDescription>
+                        <CardTitle className="text-xl mb-2">{article.title}</CardTitle>
+                        <CardDescription>{article.description}</CardDescription>
                       </CardContent>
                       <CardFooter className="p-4 pt-0 flex justify-between items-center">
-                        <span className="text-sm text-muted-foreground">Mayo {i + 1}, 2025</span>
-                        <Button variant="ghost" size="sm" className="gap-1 text-primary">
-                          Leer Más <ChevronRight className="h-4 w-4" />
-                        </Button>
-                      </CardFooter>
-                    </Card>
-                  ))}
-                </div>
-                <div className="flex justify-center mt-8">
-                  <Button variant="outline">Cargar Más Artículos</Button>
-                </div>
-              </TabsContent>
-              <TabsContent value="events" className="space-y-4">
-                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {[1, 2, 3].map((i) => (
-                    <Card key={i} className="overflow-hidden">
-                      <CardHeader className="p-0">
-                        <Image
-                          src={`/placeholder.svg?height=200&width=400&text=Evento+${i}`}
-                          width={400}
-                          height={200}
-                          alt={`Evento ${i}`}
-                          className="w-full object-cover"
-                        />
-                      </CardHeader>
-                      <CardContent className="p-4">
-                        <Badge className="mb-2 bg-primary text-black hover:bg-primary/90">Evento</Badge>
-                        <CardTitle className="text-xl mb-2">
-                          {i === 1
-                            ? `Próximo Taller: Fundamentos de Desarrollo Web`
-                            : i === 2
-                              ? `Charla Tecnológica: Futuro del Blockchain`
-                              : `Networking con Profesionales de la Industria`}
-                        </CardTitle>
-                        <CardDescription>
-                          {i === 1
-                            ? `Únete a nosotros para una sesión interactiva sobre técnicas modernas de desarrollo web.`
-                            : i === 2
-                              ? `Aprende sobre la tecnología blockchain y sus aplicaciones más allá de las criptomonedas.`
-                              : `Conéctate con profesionales de empresas tecnológicas líderes en un ambiente casual.`}
-                        </CardDescription>
-                      </CardContent>
-                      <CardFooter className="p-4 pt-0 flex justify-between items-center">
-                        <span className="text-sm text-muted-foreground">Mayo {i + 5}, 2025</span>
-                        <Button variant="ghost" size="sm" className="gap-1 text-primary">
-                          Leer Más <ChevronRight className="h-4 w-4" />
-                        </Button>
+                        <span className="text-sm text-muted-foreground">{article.date}</span>
+                        <Link href={`/news/${article.id}`}>
+                          <Button variant="ghost" size="sm" className="gap-1 text-primary">
+                            Leer Más <ChevronRight className="h-4 w-4" />
+                          </Button>
+                        </Link>
                       </CardFooter>
                     </Card>
                   ))}
                 </div>
               </TabsContent>
-              <TabsContent value="tech" className="space-y-4">
+
+              <TabsContent value="Evento" className="space-y-4">
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {[1, 2, 3].map((i) => (
-                    <Card key={i} className="overflow-hidden">
+                  {filteredArticles('Evento').map((article) => (
+                    <Card key={article.id} className="overflow-hidden">
                       <CardHeader className="p-0">
                         <Image
-                          src={`/placeholder.svg?height=200&width=400&text=Tecnología+${i}`}
+                          src={article.imageUrl}
                           width={400}
                           height={200}
-                          alt={`Noticias de Tecnología ${i}`}
+                          alt={article.title}
                           className="w-full object-cover"
                         />
                       </CardHeader>
                       <CardContent className="p-4">
-                        <Badge className="mb-2 bg-primary text-black hover:bg-primary/90">Tecnología</Badge>
-                        <CardTitle className="text-xl mb-2">
-                          {i === 1
-                            ? `Nuevo Avance en IA Cambia Todo`
-                            : i === 2
-                              ? `El Auge de la Computación Cuántica`
-                              : `Web3 y el Futuro de Internet`}
-                        </CardTitle>
-                        <CardDescription>
-                          {i === 1
-                            ? `Los últimos avances en inteligencia artificial están revolucionando cómo interactuamos con la tecnología.`
-                            : i === 2
-                              ? `La computación cuántica está avanzando hacia aplicaciones prácticas en varias industrias.`
-                              : `Explorando cómo las tecnologías Web3 están remodelando nuestras experiencias digitales.`}
-                        </CardDescription>
+                        <Badge className="mb-2 bg-primary text-black hover:bg-primary/90">
+                          {article.category}
+                        </Badge>
+                        <CardTitle className="text-xl mb-2">{article.title}</CardTitle>
+                        <CardDescription>{article.description}</CardDescription>
                       </CardContent>
                       <CardFooter className="p-4 pt-0 flex justify-between items-center">
-                        <span className="text-sm text-muted-foreground">Mayo {i + 2}, 2025</span>
-                        <Button variant="ghost" size="sm" className="gap-1 text-primary">
-                          Leer Más <ChevronRight className="h-4 w-4" />
-                        </Button>
+                        <span className="text-sm text-muted-foreground">{article.date}</span>
+                        <Link href={`/news/${article.id}`}>
+                          <Button variant="ghost" size="sm" className="gap-1 text-primary">
+                            Leer Más <ChevronRight className="h-4 w-4" />
+                          </Button>
+                        </Link>
                       </CardFooter>
                     </Card>
                   ))}
                 </div>
               </TabsContent>
-              <TabsContent value="startups" className="space-y-4">
+
+              <TabsContent value="Tecnología" className="space-y-4">
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {[1, 2, 3].map((i) => (
-                    <Card key={i} className="overflow-hidden">
+                  {filteredArticles('Tecnología').map((article) => (
+                    <Card key={article.id} className="overflow-hidden">
                       <CardHeader className="p-0">
                         <Image
-                          src={`/placeholder.svg?height=200&width=400&text=Startup+${i}`}
+                          src={article.imageUrl}
                           width={400}
                           height={200}
-                          alt={`Noticias de Startup ${i}`}
+                          alt={article.title}
                           className="w-full object-cover"
                         />
                       </CardHeader>
                       <CardContent className="p-4">
-                        <Badge className="mb-2 bg-primary text-black hover:bg-primary/90">Startup</Badge>
-                        <CardTitle className="text-xl mb-2">
-                          {i === 1
-                            ? `Startup Estudiantil Recauda $2M en Financiamiento`
-                            : i === 2
-                              ? `Innovadores del Campus Lanzan Nueva App`
-                              : `Exalumno de Tech Trek Crea Solución Tecnológica Sostenible`}
-                        </CardTitle>
-                        <CardDescription>
-                          {i === 1
-                            ? `Una startup fundada por estudiantes universitarios ha asegurado un financiamiento significativo para su solución innovadora.`
-                            : i === 2
-                              ? `Estudiantes de nuestra universidad han lanzado una nueva aplicación que está ganando tracción en el mercado.`
-                              : `Un ex miembro de Tech Trek ha creado una solución tecnológica que aborda desafíos ambientales.`}
-                        </CardDescription>
+                        <Badge className="mb-2 bg-primary text-black hover:bg-primary/90">
+                          {article.category}
+                        </Badge>
+                        <CardTitle className="text-xl mb-2">{article.title}</CardTitle>
+                        <CardDescription>{article.description}</CardDescription>
                       </CardContent>
                       <CardFooter className="p-4 pt-0 flex justify-between items-center">
-                        <span className="text-sm text-muted-foreground">Mayo {i + 3}, 2025</span>
-                        <Button variant="ghost" size="sm" className="gap-1 text-primary">
-                          Leer Más <ChevronRight className="h-4 w-4" />
-                        </Button>
+                        <span className="text-sm text-muted-foreground">{article.date}</span>
+                        <Link href={`/news/${article.id}`}>
+                          <Button variant="ghost" size="sm" className="gap-1 text-primary">
+                            Leer Más <ChevronRight className="h-4 w-4" />
+                          </Button>
+                        </Link>
+                      </CardFooter>
+                    </Card>
+                  ))}
+                </div>
+              </TabsContent>
+
+              <TabsContent value="Startup" className="space-y-4">
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {filteredArticles('Startup').map((article) => (
+                    <Card key={article.id} className="overflow-hidden">
+                      <CardHeader className="p-0">
+                        <Image
+                          src={article.imageUrl}
+                          width={400}
+                          height={200}
+                          alt={article.title}
+                          className="w-full object-cover"
+                        />
+                      </CardHeader>
+                      <CardContent className="p-4">
+                        <Badge className="mb-2 bg-primary text-black hover:bg-primary/90">
+                          {article.category}
+                        </Badge>
+                        <CardTitle className="text-xl mb-2">{article.title}</CardTitle>
+                        <CardDescription>{article.description}</CardDescription>
+                      </CardContent>
+                      <CardFooter className="p-4 pt-0 flex justify-between items-center">
+                        <span className="text-sm text-muted-foreground">{article.date}</span>
+                        <Link href={`/news/${article.id}`}>
+                          <Button variant="ghost" size="sm" className="gap-1 text-primary">
+                            Leer Más <ChevronRight className="h-4 w-4" />
+                          </Button>
+                        </Link>
                       </CardFooter>
                     </Card>
                   ))}
