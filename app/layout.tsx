@@ -10,7 +10,6 @@ export const metadata: Metadata = {
   title: "Tech Trek - Conectando Estudiantes al Mundo Tecnológico",
   description:
     "Tech Trek es una organización estudiantil del ITBA dedicada a conectar la academia con la industria tecnológica a través de eventos, networking y compartiendo conocimientos.",
-    generator: 'v0.dev'
 }
 
 export default function RootLayout({
