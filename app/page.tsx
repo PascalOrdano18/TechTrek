@@ -5,7 +5,8 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ArrowRight, ExternalLink, Rocket, Zap, Globe, Users } from "lucide-react"
+import { ArrowRight, ExternalLink, Rocket, Zap, Globe, Users, Award, Medal, Star } from "lucide-react"
+import { getSponsorsByTier } from "@/data/sponsors"
 
 export default function Home() {
   return (
@@ -167,6 +168,84 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Events Section - Tech Trek Hub Card */}
+        <section id="events" className="py-32 px-6 flex items-center justify-center min-h-screen">
+          <div className="container mx-auto max-w-2xl">
+            <div
+              className="group relative perspective-1000"
+              onMouseMove={(e) => {
+                const card = e.currentTarget.querySelector(".tech-card") as HTMLElement
+                if (card) {
+                  const rect = card.getBoundingClientRect()
+                  const x = e.clientX - rect.left
+                  const y = e.clientY - rect.top
+                  const centerX = rect.width / 2
+                  const centerY = rect.height / 2
+                  const rotateX = (y - centerY) / 20
+                  const rotateY = (centerX - x) / 20
+
+                  card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`
+                }
+              }}
+              onMouseLeave={(e) => {
+                const card = e.currentTarget.querySelector(".tech-card") as HTMLElement
+                if (card) {
+                  card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)"
+                }
+              }}
+            >
+              {/* Main Event Card */}
+              <div 
+                className="tech-card relative w-full aspect-square shadow-2xl transition-all duration-500 ease-out cursor-pointer overflow-hidden rounded-lg"
+                onClick={() => window.open('https://app.fanz.com.ar/event/23376?eventDateId=33468', '_blank')}
+              >
+                <Image
+                  src="/tthub.jpeg"
+                  alt="Tech Trek Hub '25"
+                  width={600}
+                  height={600}
+                  className="w-full h-full object-cover"
+                  priority
+                />
+
+                {/* Hover Glow Effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+
+                {/* 3D Shadow Layers */}
+                <div className="absolute inset-0 bg-black/20 transform translate-x-1 translate-y-1 -z-10 opacity-0 group-hover:opacity-30 transition-all duration-500 blur-sm rounded-lg"></div>
+                <div className="absolute inset-0 bg-black/30 transform translate-x-2 translate-y-2 -z-20 opacity-0 group-hover:opacity-20 transition-all duration-500 blur-md rounded-lg"></div>
+              </div>
+
+              {/* Floating Light Particles */}
+              <div className="absolute inset-0 pointer-events-none">
+                {[...Array(6)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="absolute w-1 h-1 bg-white/60 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-1000"
+                    style={{
+                      left: `${20 + i * 15}%`,
+                      top: `${10 + i * 12}%`,
+                      animationDelay: `${i * 200}ms`,
+                      animation: "float 3s ease-in-out infinite",
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Call to Action Button */}
+            <div className="text-center mt-16">
+              <Button
+                size="lg"
+                className="bg-primary text-black hover:bg-primary/80 font-semibold px-12 py-6 text-xl transition-colors"
+                onClick={() => window.open('https://app.fanz.com.ar/event/23376?eventDateId=33468', '_blank')}
+              >
+                Registrarse Ahora
+              </Button>
+            </div>
+          </div>
+        </section>
+
         {/* Team Section */}
         <section className="py-32 px-6 bg-white/5">
           <div className="container mx-auto max-w-5xl">
@@ -290,60 +369,143 @@ export default function Home() {
 
         {/* Sponsors Section */}
         <section className="py-32 px-6 bg-white/5">
-          <div className="container mx-auto max-w-5xl">
+          <div className="container mx-auto max-w-6xl">
             <div className="text-center mb-20">
               <h2 className="text-4xl md:text-5xl font-bold mb-6">Sponsors</h2>
               <div className="w-24 h-1 bg-primary mx-auto mb-8"></div>
               <p className="text-xl text-gray-400 max-w-2xl mx-auto">Empresas que apoyan nuestra visión tecnológica</p>
             </div>
 
-            {/* Main Sponsors */}
-            <div className="mb-16">
-              <h3 className="text-center text-lg text-gray-400 mb-8">Sponsors Principales</h3>
-              <div className="grid md:grid-cols-2 gap-12 max-w-3xl mx-auto">
-                {[
-                  { name: "Mercado Libre", tier: "Gold Sponsor" },
-                  { name: "Globant", tier: "Gold Sponsor" },
-                ].map((sponsor, i) => (
-                  <Card
-                    key={i}
-                    className="bg-white/5 border-white/10 backdrop-blur-sm group hover:bg-white/10 transition-all duration-500"
-                  >
-                    <CardContent className="p-8 text-center">
-                      <div className="w-20 h-20 bg-gradient-to-br from-primary/20 to-primary/5 rounded-xl flex items-center justify-center mx-auto mb-6 group-hover:bg-primary/30 transition-colors">
-                        <span className="text-primary font-bold text-2xl">{sponsor.name.substring(0, 2)}</span>
-                      </div>
-                      <h4 className="font-bold text-xl mb-2 group-hover:text-primary transition-colors">
-                        {sponsor.name}
-                      </h4>
-                      <Badge variant="outline" className="border-primary/50 text-primary bg-primary/10">
-                        {sponsor.tier}
-                      </Badge>
-                    </CardContent>
-                  </Card>
-                ))}
+            {/* Platinum Sponsors */}
+            {getSponsorsByTier("Platinum").length > 0 && (
+              <div className="mb-20">
+                <div className="text-center mb-12">
+                  <div className="flex items-center justify-center gap-2 mb-4">
+                    <Award className="w-6 h-6 text-yellow-400" />
+                    <h3 className="text-2xl font-bold text-yellow-400">Platinum</h3>
+                    <Award className="w-6 h-6 text-yellow-400" />
+                  </div>
+                  <p className="text-gray-400">Nuestros patrocinadores principales</p>
+                </div>
+                <div className="grid md:grid-cols-2 gap-16 max-w-4xl mx-auto">
+                  {getSponsorsByTier("Platinum").map((sponsor) => (
+                    <Card
+                      key={sponsor.id}
+                      className="bg-gradient-to-br from-yellow-400/10 to-yellow-600/5 border-yellow-400/20 backdrop-blur-sm group hover:from-yellow-400/20 hover:to-yellow-600/10 transition-all duration-500 shadow-lg"
+                    >
+                      <CardContent className="p-10 text-center">
+                        <div className="w-28 h-28 bg-gradient-to-br from-yellow-400/30 to-yellow-600/10 rounded-2xl flex items-center justify-center mx-auto mb-8 group-hover:scale-105 transition-transform shadow-lg">
+                          <span className="text-yellow-400 font-bold text-3xl">{sponsor.name.substring(0, 2)}</span>
+                        </div>
+                        <h4 className="font-bold text-2xl mb-3 group-hover:text-yellow-400 transition-colors">
+                          {sponsor.name}
+                        </h4>
+                        <p className="text-gray-400 text-sm mb-4">{sponsor.description}</p>
+                        <Badge variant="outline" className="border-yellow-400/50 text-yellow-400 bg-yellow-400/10">
+                          Platinum Sponsor
+                        </Badge>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
-            {/* Supporting Sponsors */}
-            <div>
-              <h3 className="text-center text-lg text-gray-400 mb-8">Sponsors de Apoyo</h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
-                {["Auth0", "Despegar", "Ualá", "PedidosYa"].map((company, i) => (
-                  <Card
-                    key={i}
-                    className="bg-white/5 border-white/10 backdrop-blur-sm group hover:bg-white/10 transition-all duration-300"
-                  >
-                    <CardContent className="p-6 text-center">
-                      <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
-                        <span className="text-primary font-bold text-lg">{company.substring(0, 2)}</span>
-                      </div>
-                      <h4 className="font-semibold text-sm group-hover:text-primary transition-colors">{company}</h4>
-                    </CardContent>
-                  </Card>
-                ))}
+            {/* Gold Sponsors */}
+            {getSponsorsByTier("Gold").length > 0 && (
+              <div className="mb-20">
+                <div className="text-center mb-12">
+                  <div className="flex items-center justify-center gap-2 mb-4">
+                    <Medal className="w-6 h-6 text-yellow-500" />
+                    <h3 className="text-2xl font-bold text-yellow-500">Gold</h3>
+                    <Medal className="w-6 h-6 text-yellow-500" />
+                  </div>
+                  <p className="text-gray-400">Patrocinadores oro</p>
+                </div>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-5xl mx-auto">
+                  {getSponsorsByTier("Gold").map((sponsor) => (
+                    <Card
+                      key={sponsor.id}
+                      className="bg-gradient-to-br from-yellow-500/10 to-yellow-600/5 border-yellow-500/20 backdrop-blur-sm group hover:from-yellow-500/20 hover:to-yellow-600/10 transition-all duration-500"
+                    >
+                      <CardContent className="p-8 text-center">
+                        <div className="w-20 h-20 bg-gradient-to-br from-yellow-500/30 to-yellow-600/10 rounded-xl flex items-center justify-center mx-auto mb-6 group-hover:scale-105 transition-transform">
+                          <span className="text-yellow-500 font-bold text-2xl">{sponsor.name.substring(0, 2)}</span>
+                        </div>
+                        <h4 className="font-bold text-xl mb-2 group-hover:text-yellow-500 transition-colors">
+                          {sponsor.name}
+                        </h4>
+                        <p className="text-gray-400 text-xs mb-3">{sponsor.description}</p>
+                        <Badge variant="outline" className="border-yellow-500/50 text-yellow-500 bg-yellow-500/10">
+                          Gold Sponsor
+                        </Badge>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
+
+            {/* Silver Sponsors */}
+            {getSponsorsByTier("Silver").length > 0 && (
+              <div className="mb-20">
+                <div className="text-center mb-12">
+                  <div className="flex items-center justify-center gap-2 mb-4">
+                    <Star className="w-6 h-6 text-gray-400" />
+                    <h3 className="text-2xl font-bold text-gray-400">Silver</h3>
+                    <Star className="w-6 h-6 text-gray-400" />
+                  </div>
+                  <p className="text-gray-500">Patrocinadores plata</p>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto">
+                  {getSponsorsByTier("Silver").map((sponsor) => (
+                    <Card
+                      key={sponsor.id}
+                      className="bg-gradient-to-br from-gray-400/10 to-gray-500/5 border-gray-400/20 backdrop-blur-sm group hover:from-gray-400/20 hover:to-gray-500/10 transition-all duration-300"
+                    >
+                      <CardContent className="p-6 text-center">
+                        <div className="w-16 h-16 bg-gradient-to-br from-gray-400/30 to-gray-500/10 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:scale-105 transition-transform">
+                          <span className="text-gray-400 font-bold text-lg">{sponsor.name.substring(0, 2)}</span>
+                        </div>
+                        <h4 className="font-semibold text-sm group-hover:text-gray-300 transition-colors mb-2">
+                          {sponsor.name}
+                        </h4>
+                        <Badge variant="outline" className="border-gray-400/50 text-gray-400 bg-gray-400/10 text-xs">
+                          Silver
+                        </Badge>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Nos acompañan */}
+            {getSponsorsByTier("Nos acompañan").length > 0 && (
+              <div className="mb-16">
+                <div className="text-center mb-12">
+                  <h3 className="text-xl font-bold text-gray-400 mb-2">Nos acompañan</h3>
+                  <p className="text-gray-500">Organizaciones que apoyan nuestra misión</p>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+                  {getSponsorsByTier("Nos acompañan").map((sponsor) => (
+                    <Card
+                      key={sponsor.id}
+                      className="bg-white/5 border-white/10 backdrop-blur-sm group hover:bg-white/10 transition-all duration-300"
+                    >
+                      <CardContent className="p-4 text-center">
+                        <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-primary/20 transition-colors">
+                          <span className="text-primary font-bold text-sm">{sponsor.name.substring(0, 2)}</span>
+                        </div>
+                        <h4 className="font-semibold text-xs group-hover:text-primary transition-colors">
+                          {sponsor.name}
+                        </h4>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <div className="text-center mt-16">
               <p className="text-gray-400 mb-6">¿Tu empresa quiere patrocinar Tech Trek?</p>
@@ -352,79 +514,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Events Section - Tech Trek Hub Card */}
-        <section id="events" className="py-32 px-6 flex items-center justify-center min-h-screen">
-          <div className="container mx-auto max-w-2xl">
-            <div
-              className="group relative perspective-1000"
-              onMouseMove={(e) => {
-                const card = e.currentTarget.querySelector(".tech-card") as HTMLElement
-                if (card) {
-                  const rect = card.getBoundingClientRect()
-                  const x = e.clientX - rect.left
-                  const y = e.clientY - rect.top
-                  const centerX = rect.width / 2
-                  const centerY = rect.height / 2
-                  const rotateX = (y - centerY) / 20
-                  const rotateY = (centerX - x) / 20
 
-                  card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`
-                }
-              }}
-              onMouseLeave={(e) => {
-                const card = e.currentTarget.querySelector(".tech-card") as HTMLElement
-                if (card) {
-                  card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)"
-                }
-              }}
-            >
-              {/* Main Event Card */}
-              <div className="tech-card relative w-full aspect-square shadow-2xl transition-all duration-500 ease-out cursor-pointer overflow-hidden rounded-lg">
-                <Image
-                  src="/tthub.jpeg"
-                  alt="Tech Trek Hub '25"
-                  width={600}
-                  height={600}
-                  className="w-full h-full object-cover"
-                  priority
-                />
-
-                {/* Hover Glow Effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-
-                {/* 3D Shadow Layers */}
-                <div className="absolute inset-0 bg-black/20 transform translate-x-1 translate-y-1 -z-10 opacity-0 group-hover:opacity-30 transition-all duration-500 blur-sm rounded-lg"></div>
-                <div className="absolute inset-0 bg-black/30 transform translate-x-2 translate-y-2 -z-20 opacity-0 group-hover:opacity-20 transition-all duration-500 blur-md rounded-lg"></div>
-              </div>
-
-              {/* Floating Light Particles */}
-              <div className="absolute inset-0 pointer-events-none">
-                {[...Array(6)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="absolute w-1 h-1 bg-white/60 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-1000"
-                    style={{
-                      left: `${20 + i * 15}%`,
-                      top: `${10 + i * 12}%`,
-                      animationDelay: `${i * 200}ms`,
-                      animation: "float 3s ease-in-out infinite",
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-
-            {/* Call to Action Button */}
-            <div className="text-center mt-16">
-              <Button
-                size="lg"
-                className="bg-primary text-black hover:bg-primary/80 font-semibold px-12 py-6 text-xl transition-colors"
-              >
-                Registrarse Ahora
-              </Button>
-            </div>
-          </div>
-        </section>
 
         {/* Stats Section */}
         <section className="py-32 px-6">
