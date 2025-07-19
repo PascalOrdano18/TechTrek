@@ -2,6 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Add scroll margin to account for fixed header */
+section[id], footer[id] {
+  scroll-margin-top: 5rem;
+}
+
+/* Special positioning for events section to show title and center card */
+#events {
+  scroll-margin-top: 0rem;
+}
+
+/* Enhanced smooth scrolling for better UX */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Floating animation for particles */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

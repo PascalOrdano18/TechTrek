@@ -34,7 +34,7 @@ export default function Home() {
         {/* Header */}
         <header className="fixed top-0 w-full z-50 backdrop-blur-xl bg-black/20 border-b border-white/10">
           <div className="container mx-auto px-6 h-16 flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-3">
+            <Link href="#home" className="flex items-center gap-3">
               <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
                 <Rocket className="w-4 h-4 text-black" />
               </div>
@@ -60,7 +60,7 @@ export default function Home() {
         </header>
 
         {/* Hero Section */}
-        <section className="min-h-screen flex items-center justify-center px-6 pt-16">
+        <section id="home" className="min-h-screen flex items-center justify-center px-6 pt-16">
           <div className="text-center max-w-4xl mx-auto">
             <div className="mb-8">
               <Badge variant="outline" className="border-primary/50 text-primary bg-primary/10 mb-6">
@@ -168,80 +168,146 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Events Section - Tech Trek Hub Card */}
-        <section id="events" className="py-32 px-6 flex items-center justify-center min-h-screen">
-          <div className="container mx-auto max-w-2xl">
-            <div
-              className="group relative perspective-1000"
-              onMouseMove={(e) => {
-                const card = e.currentTarget.querySelector(".tech-card") as HTMLElement
-                if (card) {
-                  const rect = card.getBoundingClientRect()
-                  const x = e.clientX - rect.left
-                  const y = e.clientY - rect.top
-                  const centerX = rect.width / 2
-                  const centerY = rect.height / 2
-                  const rotateX = (y - centerY) / 20
-                  const rotateY = (centerX - x) / 20
+        {/* Events Section - Tech Trek Hub */}
+        <section id="events" className="py-32 px-6">
+          <div className="container mx-auto max-w-7xl">
+            {/* Centered Event Card */}
+            <div id="event-card" className="flex justify-center mb-16">
+              <div className="max-w-xl w-full">
+                <div
+                  className="group relative perspective-1000"
+                  onMouseMove={(e) => {
+                    const card = e.currentTarget.querySelector(".tech-card") as HTMLElement
+                    if (card) {
+                      const rect = card.getBoundingClientRect()
+                      const x = e.clientX - rect.left
+                      const y = e.clientY - rect.top
+                      const centerX = rect.width / 2
+                      const centerY = rect.height / 2
+                      const rotateX = (y - centerY) / 20
+                      const rotateY = (centerX - x) / 20
 
-                  card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`
-                }
-              }}
-              onMouseLeave={(e) => {
-                const card = e.currentTarget.querySelector(".tech-card") as HTMLElement
-                if (card) {
-                  card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)"
-                }
-              }}
-            >
-              {/* Main Event Card */}
-              <div 
-                className="tech-card relative w-full aspect-square shadow-2xl transition-all duration-500 ease-out cursor-pointer overflow-hidden rounded-lg"
-                onClick={() => window.open('https://app.fanz.com.ar/event/23376?eventDateId=33468', '_blank')}
-              >
-                <Image
-                  src="/tthub.jpeg"
-                  alt="Tech Trek Hub '25"
-                  width={600}
-                  height={600}
-                  className="w-full h-full object-cover"
-                  priority
-                />
+                      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    const card = e.currentTarget.querySelector(".tech-card") as HTMLElement
+                    if (card) {
+                      card.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)"
+                    }
+                  }}
+                >
+                  {/* Main Event Card */}
+                  <div 
+                    className="tech-card relative w-full aspect-square shadow-2xl transition-all duration-500 ease-out cursor-pointer overflow-hidden rounded-lg"
+                    onClick={() => window.open('https://app.fanz.com.ar/event/23376?eventDateId=33468', '_blank')}
+                  >
+                    <Image
+                      src="/tthub.jpeg"
+                      alt="Tech Trek Hub '25"
+                      width={600}
+                      height={600}
+                      className="w-full h-full object-cover"
+                      priority
+                    />
 
-                {/* Hover Glow Effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                    {/* Hover Glow Effect */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
 
-                {/* 3D Shadow Layers */}
-                <div className="absolute inset-0 bg-black/20 transform translate-x-1 translate-y-1 -z-10 opacity-0 group-hover:opacity-30 transition-all duration-500 blur-sm rounded-lg"></div>
-                <div className="absolute inset-0 bg-black/30 transform translate-x-2 translate-y-2 -z-20 opacity-0 group-hover:opacity-20 transition-all duration-500 blur-md rounded-lg"></div>
-              </div>
+                    {/* 3D Shadow Layers */}
+                    <div className="absolute inset-0 bg-black/20 transform translate-x-1 translate-y-1 -z-10 opacity-0 group-hover:opacity-30 transition-all duration-500 blur-sm rounded-lg"></div>
+                    <div className="absolute inset-0 bg-black/30 transform translate-x-2 translate-y-2 -z-20 opacity-0 group-hover:opacity-20 transition-all duration-500 blur-md rounded-lg"></div>
+                  </div>
 
-              {/* Floating Light Particles */}
-              <div className="absolute inset-0 pointer-events-none">
-                {[...Array(6)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="absolute w-1 h-1 bg-white/60 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-1000"
-                    style={{
-                      left: `${20 + i * 15}%`,
-                      top: `${10 + i * 12}%`,
-                      animationDelay: `${i * 200}ms`,
-                      animation: "float 3s ease-in-out infinite",
-                    }}
-                  />
-                ))}
+                  {/* Floating Light Particles */}
+                  <div className="absolute inset-0 pointer-events-none">
+                    {[...Array(6)].map((_, i) => (
+                      <div
+                        key={i}
+                        className="absolute w-1 h-1 bg-white/60 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-1000"
+                        style={{
+                          left: `${20 + i * 15}%`,
+                          top: `${10 + i * 12}%`,
+                          animationDelay: `${i * 200}ms`,
+                          animation: "float 3s ease-in-out infinite",
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Registration Note */}
+                <div className="text-center mt-8">
+                  <Badge className="bg-primary/20 border-primary/50 text-primary">
+                    Registro abierto
+                  </Badge>
+                </div>
               </div>
             </div>
 
-            {/* Call to Action Button */}
-            <div className="text-center mt-16">
-              <Button
-                size="lg"
-                className="bg-primary text-black hover:bg-primary/80 font-semibold px-12 py-6 text-xl transition-colors"
-                onClick={() => window.open('https://app.fanz.com.ar/event/23376?eventDateId=33468', '_blank')}
-              >
-                Registrarse Ahora
-              </Button>
+            {/* Event Information Grid */}
+            <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+              {/* What is Tech Trek Hub */}
+              <div className="bg-white/5 border border-white/10 rounded-lg p-8 backdrop-blur-sm">
+                <h4 className="text-xl font-semibold mb-4 text-white">¿Qué es Tech Trek Hub?</h4>
+                <p className="text-gray-400 leading-relaxed mb-6">
+                  Una experiencia única que conecta estudiantes con empresas líderes, startups innovadoras 
+                  y profesionales del ecosistema tecnológico argentino e internacional.
+                </p>
+                <ul className="space-y-3 text-gray-400">
+                  <li className="flex items-start gap-3">
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 shrink-0"></div>
+                    <span>Charlas magistrales con líderes de la industria</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 shrink-0"></div>
+                    <span>Workshops técnicos y mentorías personalizadas</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 shrink-0"></div>
+                    <span>Networking con más de 500 estudiantes y profesionales</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-1.5 h-1.5 bg-primary rounded-full mt-2 shrink-0"></div>
+                    <span>Demo day de startups estudiantiles</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Event Details */}
+              <div className="bg-white/5 border border-white/10 rounded-lg p-8 backdrop-blur-sm">
+                <h4 className="text-xl font-semibold mb-4 text-primary">Tech Trek Hub 2025</h4>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">📅</span>
+                    <div>
+                      <span className="text-gray-400 text-sm">Fecha</span>
+                      <div className="text-white font-semibold">8 de Agosto</div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">🕛</span>
+                    <div>
+                      <span className="text-gray-400 text-sm">Horario</span>
+                      <div className="text-white font-semibold">12:00 - 18:00 hs</div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">📍</span>
+                    <div>
+                      <span className="text-gray-400 text-sm">Lugar</span>
+                      <div className="text-white font-semibold">Domos del Parque de Innovación</div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">🎫</span>
+                    <div>
+                      <span className="text-gray-400 text-sm">Entrada</span>
+                      <div className="text-white font-semibold">Gratuita</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
