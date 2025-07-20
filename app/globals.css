@@ -14,7 +14,7 @@ section[id], footer[id] {
 
 /* Special positioning for events section to show title and center card */
 #events {
-  scroll-margin-top: 0rem;
+  scroll-margin-top: 6rem;
 }
 
 /* Enhanced smooth scrolling for better UX */
